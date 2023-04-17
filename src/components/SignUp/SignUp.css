@@ -1,0 +1,8 @@
+.text-error {
+  color: rgb(204, 54, 54);
+  margin-left: 20px;
+}
+.text-success {
+  color: rgb(55, 187, 55);
+  margin-left: 20px;
+}

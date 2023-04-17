@@ -1,37 +1,46 @@
 import React, { useContext, useState } from "react";
-import "./Login.css";
+import "./SignUp.css";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../Providers/AuthProvider";
 
-const Login = () => {
+const SignUp = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [show, setShow] = useState(false);
+  const { createUser } = useContext(AuthContext);
 
-  const { signIn } = useContext(AuthContext);
-  const handleSignIn = (event) => {
+  const handleSignUp = (event) => {
     event.preventDefault();
     setError("");
     setSuccess("");
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-    signIn(email, password)
+    const confirm = form.confirm.value;
+
+    if (password !== confirm) {
+      setError("Your password is incorrect");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Your password must be at least 6 characters");
+      return;
+    }
+
+    createUser(email, password)
       .then((result) => {
-        const loggedUser = result.user;
-        console.log(loggedUser);
-        setSuccess("Successfully logged in");
-        form.reset();
+        const signedUser = result.user;
+        console.log(signedUser);
+        setSuccess("Successfully signed");
       })
       .catch((error) => {
         setError(error.message);
-        console.log(error.message);
       });
   };
   return (
     <div className="form-container">
-      <h2 className="form-title">Login</h2>
-      <form onSubmit={handleSignIn}>
+      <h2 className="form-title">Sign Up</h2>
+      <form onSubmit={handleSignUp}>
         <div className="form-control">
           <label htmlFor="email">Email</label>
           <input type="email" name="email" id="" required />
@@ -44,6 +53,15 @@ const Login = () => {
             id=""
             required
           />
+        </div>
+        <div className="form-control">
+          <label htmlFor="confirm">Confirm Password</label>
+          <input
+            type={show ? "text" : "password"}
+            name="confirm"
+            id=""
+            required
+          />
           <p className="s-h-pass" onClick={() => setShow(!show)}>
             <small>
               {show ? <span>Hide Password</span> : <span>Show Password</span>}
@@ -52,15 +70,15 @@ const Login = () => {
           <span className="text-error">{error}</span>
           <span className="text-success">{success}</span>
         </div>
-        <input className="btn-submit" type="submit" value="Login" />
+        <input className="btn-submit" type="submit" value="Sign Up" />
       </form>
       <p>
         <small>
-          New to Ema-john? <Link to="/signup">Create New Account</Link>
+          Already have an account? <Link to="/login">Login</Link>
         </small>
       </p>
     </div>
   );
 };
 
-export default Login;
+export default SignUp;
