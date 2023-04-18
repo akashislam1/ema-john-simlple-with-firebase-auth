@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const Header = () => {
-  const { user, logOut } = useContext(AuthContext);
+  const { user, logOut, signIn } = useContext(AuthContext);
 
   return (
     <nav className="header">
@@ -17,9 +17,11 @@ const Header = () => {
         <Link to="/login">Login</Link>
         <Link to="/signup">Sign up</Link>
         {user && (
-          <span style={{ color: "white" }}>
+          <span style={{ color: "white", marginLeft: "20px" }}>
             {user.email}
-            <button onClick={() => logOut()}>Log Out</button>
+            <button style={{ marginLeft: "20px" }} onClick={() => logOut()}>
+              Log Out
+            </button>
           </span>
         )}
       </div>
